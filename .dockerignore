@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+node_modules
+backups
+previews
+data
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.log
+__pycache__
+.DS_Store

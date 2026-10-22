@@ -1,0 +1,20 @@
+services:
+  protocol-zero:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8787
+      DB_PATH: /app/data/protocol-zero.sqlite
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - protocol_zero_data:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  protocol_zero_data:

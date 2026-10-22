@@ -1,0 +1,13 @@
+{
+  "name": "protocol-zero-cinema-engine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency interactive cinema with 15-scene branching story and standalone prototype",
+  "scripts": {
+    "start": "node tools/server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check src/app.mjs && node --check story/engine.mjs && npm test"
+  },
+  "engines": {"node": ">=22.13.0"}
+}

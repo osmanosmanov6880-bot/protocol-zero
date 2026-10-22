@@ -1,0 +1,36 @@
+'use strict';
+const {test,before,after}=require('node:test');const assert=require('node:assert/strict');
+const path=require('node:path');const fs=require('node:fs');const os=require('node:os');
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'pz-wave4-'));process.env.DB_PATH=path.join(dir,'test.sqlite');
+const {server,db}=require('../src/server');const {reviewSubmission}=require('../src/submissions');
+const {funnel}=require('../src/analytics');const {moderationSet}=require('../src/database');
+let origin;
+function client(){let cookie='';return async(url,method='GET',body)=>{const headers={};if(cookie)headers.cookie=cookie;if(body!==undefined)headers['content-type']='application/json';const r=await fetch(origin+url,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});if(r.headers.get('set-cookie'))cookie=r.headers.get('set-cookie').split(';')[0];return{status:r.status,body:await r.json()};};}
+const draft={brand:'INSIGHTS BRAND',title:'Проверка рекламных гипотез',category:'Креативные услуги',short:'Студия рассказывает о задачах визуального дизайна и своих проектах.',audience:'Небольшие компании, которым нужны дизайнерские услуги',promise:'Познакомить клиентов с работами студии и их авторами',evidence:'Указанные факты требуют проверки заявителем и оператором.',visual:'Реальные фотографии работ и крупные заголовки',hook:'Новые идеи рождаются из вопросов',tone:'Деловой',cta:'Посмотреть подборку наших проектов',website:'',contactEmail:'',contactConsent:false,rightsConfirmed:true,publicConfirmed:true};
+before(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));origin='http://127.0.0.1:'+server.address().port;});
+after(async()=>{await new Promise(r=>server.close(r));db.close();fs.rmSync(dir,{recursive:true,force:true});});
+test('WAVE 4: brand insights are owner-only, and accepted invitations count once as observed first activation',async()=>{
+  const owner=client(),author=client(),guest=client(),outsider=client();
+  await Promise.all([owner('/api/bootstrap'),author('/api/bootstrap'),guest('/api/bootstrap'),outsider('/api/bootstrap')]);
+  const sid=(await owner('/api/business-briefs','POST',draft)).body.id;
+  const root=reviewSubmission(db,sid,'approved','Ручная проверка рекламного текста и допустимости публикации').rootId;
+  const branch=(await author('/api/mutations','POST',{parentId:root,gene:'hook',value:'Дизайн помогает находить общий язык'})).body;
+  const token=(await author('/api/branches/'+branch.id+'/invites','POST',{})).body.token;
+  const child=await guest('/api/mutations','POST',{parentId:branch.id,gene:'cta',value:'Посмотреть избранные работы',inviteToken:token});
+  assert.equal(child.status,201);
+  const viewed=await owner('/api/business-briefs/'+sid+'/insights');assert.equal(viewed.status,200);
+  const counts=viewed.body.counts;
+  assert.equal(counts.publishedMutations,2);assert.equal(counts.participantBrowsers,2);
+  assert.equal(counts.inviteCompletions,1);assert.equal(counts.firstObservedViaInvite,1);
+  assert.equal(counts.firstInviteObservedRatio,50);
+  assert.equal((await outsider('/api/business-briefs/'+sid+'/insights')).status,403);
+  assert.equal(viewed.body.geneCounts.cta,1);
+  assert(viewed.body.caveats.some(x=>x.includes('не являются рекламными')));
+  const funnelData=funnel(db);
+  assert.equal(funnelData.referral.coefficient,0.5);
+  assert.match(funnelData.referral.denominator,/all activated/);
+  moderationSet(db,branch.id,'hidden','Тестовый запрет публикации всей последовательности изменений');
+  const hidden=await owner('/api/business-briefs/'+sid+'/insights');
+  assert.equal(hidden.body.counts.publishedMutations,0);
+  assert.equal(hidden.body.counts.inviteCompletions,0);
+});

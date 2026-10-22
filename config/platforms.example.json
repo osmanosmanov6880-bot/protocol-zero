@@ -1,0 +1,10 @@
+[
+  {
+    "key":"real_product_one",
+    "name":"УКАЖИТЕ ПОДТВЕРЖДЁННОЕ НАЗВАНИЕ",
+    "url":"https://replace-with-your-verified-product.example/",
+    "mode":"live",
+    "secretEnv":"PZ_REAL_PRODUCT_ONE_SECRET",
+    "capabilities":["Укажите только реально поддерживаемые функции"]
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "name": "protocol-zero-inheritance",
+  "version": "3.4.0",
+  "private": true,
+  "description": "Cinematic bridge: integrated 15-scene web film and opt-in public campaign lineage",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/*.test.js",
+    "check": "node --check scripts/verify-manifest.js && node --check src/server.js && node --check src/database.js && node --check src/ops.js && node --check src/backup.js && node --check src/bridge.js && node --check src/commercial-schema.js && node --check src/review-rooms.js && node --check src/experiment-integrity.js && node --check src/pilots.js && node --check src/commercial-maintenance.js && node --check src/doctor.js && node --check public/app.js && node --check examples/partner-sandbox.js && node --check examples/start-demo.js && node --check src/analytics.js && node --check src/submissions.js && node --check sdk/node-partner.js && node --check src/quality.js && node --check src/curation.js && node --check src/experiments.js && node --check src/insights.js && node --check src/maintenance.js && node --check scripts/smoke-server.js && node --check src/waves11-15-schema.js && node --check src/campaign-control.js && node --check src/creative-packs.js && node --check src/experiment-close.js && node --check src/pilot-milestones.js && node --check src/business-overview.js && node --check src/waves16-20-schema.js && node --check src/commercial-audit.js && node --check src/team-access.js && node --check src/client-deliverables.js && node --check src/partner-evidence.js && node --check src/launch-readiness.js && node --check src/cinema-bridge.js && node --check cinema/src/app.mjs",
+    "report": "node src/report.js",
+    "verify:release": "node scripts/verify-manifest.js",
+    "start:env": "node --env-file=.env src/server.js",
+    "ops": "node src/ops.js",
+    "backup": "node src/backup.js",
+    "demo": "node examples/start-demo.js",
+    "smoke": "node scripts/smoke-server.js"
+  },
+  "license": "UNLICENSED"
+}
