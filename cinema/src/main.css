@@ -63,3 +63,8 @@
 .bridge-invitation{border:1px solid #967a4d;background:#35271950;padding:16px;display:flex;flex-direction:column;gap:9px}
 .bridge-url{overflow-wrap:anywhere;font-size:13px;color:#f0ddae;margin:0}
 @media(max-width:700px){.reality-dialog .dialog-head{padding:18px 16px}.reality-dialog h2{font-size:21px;letter-spacing:.025em}.reality-body{padding:2px 16px 14px}.reality-status{padding:0 16px 15px}.bridge-actions{display:grid;grid-template-columns:1fr}.bridge-actions a,.bridge-actions button{width:100%}.bridge-current{font-size:15px}.bridge-consequences{padding:15px}}
+
+/* MARCOSA NETWORK: explicit post-ending invitation, never an injected tracker. */
+.ending-actions .network-continuation{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:13px 17px;border:1px solid #b5ead0;border-radius:3px;background:linear-gradient(110deg,#244b43,#233b42);color:#e8f9ea;font-size:12px;font-weight:700;letter-spacing:.03em;text-decoration:none;text-align:center}
+.ending-actions .network-continuation:hover,.ending-actions .network-continuation:focus-visible{background:#326b57;box-shadow:0 0 0 2px #d0f5e455}
+@media(max-width:700px){.ending-actions .network-continuation{width:100%;line-height:1.45}}
