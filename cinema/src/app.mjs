@@ -114,6 +114,15 @@ function renderEnding(scene){const area=qs('ending-actions');area.replaceChildre
  if(available)area.append(button(t('endProduct'),'end-secondary',()=>{
   toast(t('external'));window.open(productTarget,'_blank','noopener,noreferrer');
  }));
+ const marcosa=document.createElement('a');
+ marcosa.className='network-continuation';
+ marcosa.href='https://marcosa.club/';
+ marcosa.target='_blank';
+ marcosa.rel='noopener noreferrer';
+ marcosa.textContent=({ru:'ДРУГИЕ ИСТОРИИ · MARCOSA ↗',en:'EXPLORE MARCOSA STORIES ↗',zh:'探索 MARCOSA 故事 ↗'})[prefs.lang]||'MARCOSA ↗';
+ marcosa.setAttribute('aria-label',({ru:'Открыть независимую платформу MARCOSA в новой вкладке, без передачи прогресса',en:'Open independent MARCOSA site in a new tab, no progress shared',zh:'在新标签页打开 MARCOSA，不发送游戏进度'})[prefs.lang]||'MARCOSA');
+ // Only reachable when the actual ending/prototype finale is shown; no automatic navigation.
+ area.append(marcosa);
  area.append(button(t('endRestart'),'end-secondary',restart),button(t('endReview'),'end-secondary',()=>openArchive()));
 }
 function asBriefText(){const brief=exportGenome(state);return `${brief.title}\n${Object.entries(brief.genome).map(([k,v])=>`${k}: ${v}`).join('\n')}\n\n${brief.disclaimer}`;}
